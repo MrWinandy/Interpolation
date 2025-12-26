@@ -3,25 +3,84 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <title>Plotly Curve Editor (Points + Tangents)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Plotly + TypeScript Demo</title>
-    <!-- Load Plotly from CDN -->
-    <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
+    <!-- Plotly CDN -->
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
     <style>
-        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; margin: 2rem; }
-        #app { max-width: 900px; }
-        .chart { width: 100%; height: 480px; }
+        body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }
+        #controls { margin-bottom: 1rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+        #plot { width: 100%; max-width: 960px; aspect-ratio: 1; border: 1px solid #ddd; }
+        .hint { color: #555; font-size: 0.9rem; }
+
+        /* Points panel styles */
+        #pointsPanel { margin-top: 1rem; max-width: 960px; }
+        table.points { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        table.points th, table.points td { border: 1px solid #e5e5e5; padding: 6px 8px; text-align: left; }
+        table.points th { background: #f7f7f7; }
+        table.points input[type="number"] { width: 5.5rem; }
+        table.points .small { width: 4.5rem; }
+        table.points .actions button { margin-right: 0.25rem; }
     </style>
 </head>
 <body>
-<h1>Plotly + TypeScript Demo</h1>
-<p>This page is driven by a TypeScript file compiled to JavaScript.</p>
+<div id="controls">
+    <button id="resetBtn">Reset points</button>
 
-<div id="app">
-    <div id="chart" class="chart"></div>
+    <label>
+        <input type="checkbox" id="splineToggle" checked />
+        Smooth spline (Hermite)
+    </label>
+
+    <label>
+        <input type="checkbox" id="editTangents" />
+        Edit
+    </label>
+
+    <label>
+        <input type="checkbox" id="snapGrid" checked/>
+        Snap to grid
+    </label>
+
+    <label>
+        Grid step
+        <input type="number" id="gridStep" min="0.05" step="0.05" value="1" />
+        <span id="gridStepValue"></span>
+    </label>
+
+    <span class="hint">
+        Click to add a point (disabled in Edit tangents). Alt+Click near a point to delete.
+        Hold <b>Shift</b> to bypass snapping while dragging/adding.
+      </span>
 </div>
 
-<!-- Your compiled TypeScript output should be placed in dist/main.js -->
-<script src="dist/main.js"></script>
+<div id="plot"></div>
+
+<!-- Editable list lives here -->
+<div id="pointsPanel"></div>
+
+
+<!-- Export / GeoGebra panel -->
+<div id="exportPanel" style="margin-top:1rem; max-width:960px;">
+    <h3 style="margin:0 0 .5rem">Export to GeoGebra</h3>
+    <div style="display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.5rem">
+        <button id="btnExportPolyline">Copy Polyline command</button>
+        <button id="btnExportSpline">Copy Spline command</button>
+        <button id="btnExportParam">Copy Parametric Curve</button>
+        <button id="btnDownloadCSV">Download CSV (sampled)</button>
+        <label style="display:inline-flex; align-items:center; gap:.4rem">
+            samples/segment
+            <input id="samplesPerSegment" type="number" min="2" max="200" step="2" value="48" />
+        </label>
+    </div>
+    <textarea id="ggbOut" rows="6" style="width:100%; font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;"></textarea>
+    <p class="hint" style="color:#555; margin-top:.5rem">
+        In GeoGebra Classic: View → Spreadsheet → paste CSV → select x & y columns → Create → List of Points → run <code>Polyline(list1)</code> or <code>Spline(list1)</code> in the Input Bar.
+    </p>
+</div>
+
+
+<!-- Your compiled TypeScript bundle -->
+<script src="./dist/index.js"></script>
 </body>
 </html>
