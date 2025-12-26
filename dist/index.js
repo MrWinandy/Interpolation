@@ -35,7 +35,7 @@ const layout = {
     margin: { l: 50, r: 20, t: 30, b: 50 },
     hovermode: false,
     xaxis: { tickmode: "linear", dtick: 1, showgrid: true, range: [-10, 10], gridcolor: "#eee" },
-    yaxis: { tickmode: "linear", dtick: 1, showgrid: true, range: [-10, 10], gridcolor: "#eee" },
+    yaxis: { tickmode: "linear", dtick: 1, showgrid: true, range: [-5, 5], gridcolor: "#eee" },
     gridwidth: 1,
     showgrid: true,
     showlegend: false,
